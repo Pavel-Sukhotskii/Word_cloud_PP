@@ -1,6 +1,6 @@
 # Word_cloud_PP
 
-This function creates PowerPoint file with a word coloud and histogram of most common words
+This function creates PowerPoint file with a word cloud and histogram of most common words
 
 Function inputs:
 * **logs** - table
