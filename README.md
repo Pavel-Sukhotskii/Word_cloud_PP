@@ -1,5 +1,7 @@
 # Word_cloud_PP
 
+This function creates PowerPoint file with a word coloud and histogram of most common words
+
 Function inputs:
 * **logs** - table
 * **column_ids:list** - list of question id's like ['QOp0a', 'QOp0b']
