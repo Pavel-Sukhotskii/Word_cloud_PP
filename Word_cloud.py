@@ -40,10 +40,11 @@ def word_cloud(logs, column_ids:list, translation=None, rows=False): # translati
         # converting to type: name - column names, answers - rows
         for q_id in column_ids:
             name = logs.question[logs.question.str.contains(q_id)].iloc[0]
-            data[name] = logs[logs.question == name].answer
+
+            data[name] = logs[logs.question == name].answer.reset_index(drop=True)
     else:
         data = logs
-            
+        
     for id in column_ids:
         
         column_name = data.columns[data.columns.str.contains(id)][0]
@@ -65,8 +66,11 @@ def word_cloud(logs, column_ids:list, translation=None, rows=False): # translati
             
             # titles automatical translation
 #             titles[id] = GoogleTranslator(source=translation, target='english').translate(column_name.split(id+'. ')[1])
-            
-        text = ' '.join(list(words)).replace('-', '').replace('  ', '') # joining the answers to one str
+        
+        for i in ['-', '  ', '’', "\'"]: # drop extra symbols
+            words = words.str.replace(i, '') 
+
+        text = ' '.join(list(words)) # joining the answers to one str
         
         wordcloud = WordCloud().generate(text)
         wordcloud = WordCloud(width=1200, height=600, background_color="white",
@@ -81,6 +85,7 @@ def word_cloud(logs, column_ids:list, translation=None, rows=False): # translati
 
         dict_to_hist = {}
         # creating a dict with counted words
+
         for word in [item for subset in [word_tokenize(i) for i in words] for item in subset]: # in list with tokenized words
             if len(word) < 3 or word in list(stop_words):
                 continue
@@ -90,7 +95,7 @@ def word_cloud(logs, column_ids:list, translation=None, rows=False): # translati
                 dict_to_hist[word] = 1
 
         dict_to_hist = dict(sorted(dict_to_hist.items(), key=lambda item: item[1])[::-1])   
-        
+#         return dict_to_hist
         plt.clf()
         plt.figure(figsize= [25, 5])
         plt.grid(alpha=0.5)
@@ -141,4 +146,4 @@ def word_cloud(logs, column_ids:list, translation=None, rows=False): # translati
 
         pic = slide.shapes.add_picture(hist_path, hist_left, hist_top, height=hist_height, width=hist_width)
         
-    ppt.save('Results/%s.pptx' % FILE_NAME)        
+    ppt.save('results/%s.pptx' % FILE_NAME)        
