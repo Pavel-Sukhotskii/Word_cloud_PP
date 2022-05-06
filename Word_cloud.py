@@ -95,7 +95,7 @@ def word_cloud(logs, column_ids:list, translation=None, rows=False): # translati
                 dict_to_hist[word] = 1
 
         dict_to_hist = dict(sorted(dict_to_hist.items(), key=lambda item: item[1])[::-1])   
-#         return dict_to_hist
+
         plt.clf()
         plt.figure(figsize= [25, 5])
         plt.grid(alpha=0.5)
